@@ -67,7 +67,7 @@ def get_style_loss(base_style, gram_target):
     return tf.reduce_mean(tf.square(gram_style - gram_target))  # / (4. * (channels ** 2) * (width * height) ** 2)
 
 
-def compute_loss(model, loss_weights, init_image, gram_style_features, content_features):
+def compute_loss(model, loss_weights, init_image, gram_style_features, content_features, num_style_layers,num_content_layers):
     ''' Вычисление общих потерь
 
     Inputs:

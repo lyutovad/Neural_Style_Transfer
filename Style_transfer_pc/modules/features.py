@@ -1,6 +1,6 @@
 import tensorflow as tf
-from preprocessing import load_and_process_img
-def get_feature_representations(model, content_path, style_path):
+from modules.preprocessing import load_and_process_img
+def get_feature_representations(model, content_path, style_path, content_layers, style_layers):
     '''Вспомогательная функция для вычисления контента и представлений стилевых функций.
 
     Эта функция загружает и предварительно обрабатывает как контент, так и изображения стилей, расположенных по указанному пути.
@@ -21,6 +21,9 @@ def get_feature_representations(model, content_path, style_path):
 
     content_features: карты признаков???
     '''
+    num_content_layers = len(content_layers) # количество слоев контента
+    num_style_layers = len(style_layers) # количество слоев стиля
+    
     # Загружаем и обрабатываем изображения контента и стиля при помощи функции load_and_process_img, написанной заранее
     content_image = load_and_process_img(content_path)
     style_image = load_and_process_img(style_path)

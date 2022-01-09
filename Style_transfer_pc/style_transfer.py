@@ -65,8 +65,9 @@ num_style_layers = len(style_layers) # количество слоев стил�
 
 
 def run_style_transfer(content_path, style_path, num_iterations=1000, content_weight=1e3, style_weight=1e-2):
-   """
-   Процесс переноса стиля
+
+    """
+    Процесс переноса стиля
 
     Inputs:
     ----------
@@ -87,19 +88,20 @@ def run_style_transfer(content_path, style_path, num_iterations=1000, content_we
         Лучшая ошибка (минимальная)
     """
 
-    model = get_model()  # загружаем модель
+    model = get_model(content_layers, style_layers)  # загружаем модель
     for layer in model.layers:
         layer.trainable = False  # Нам не нужно обучать какие-либо слои модели, поэтому мы устанавливаем для них значение false.
 
     # Получаем представления карт стиля и контента (из указанных промежуточных слоев)
-    style_features, content_features = get_feature_representations(model, content_path, style_path)
+    style_features, content_features = get_feature_representations(model, content_path, style_path,content_layers, style_layers)
     gram_style_features = [gram_matrix(style_feature) for style_feature in style_features]  # строим матрицу грамма на каждом слое и получаем список матриц
 
     # Инициируем исходное изображение
     init_image = load_and_process_img(content_path)  # загружаем и обрабатываем функцией изображение контента (передаем путь)
     init_image = tf.Variable(init_image, dtype=tf.float32)  # объявляем переменной (для того, чтобы менять значения)
     # Задаем оптимизатор
-    opt = tf.keras.optimizers.Adam(learning_rate=5, beta_1=0.99, epsilon=1e-1)  # передаем в оптимизатор learning_rate(скорость обучения)
+    opt = tf.keras.optimizers.Adam(learning_rate=5, beta_1=0.99,
+                                   epsilon=1e-1)  # передаем в оптимизатор learning_rate(скорость обучения)
     # beta1 (экспоненциальная скорость убывания оценки момента первого порядка)
     # epsilon (очень маленькое число, чтобы предотвратить деление на ноль)
 
@@ -117,7 +119,9 @@ def run_style_transfer(content_path, style_path, num_iterations=1000, content_we
         'loss_weights': loss_weights,
         'init_image': init_image,
         'gram_style_features': gram_style_features,
-        'content_features': content_features
+        'content_features': content_features,
+        'num_style_layers': num_style_layers,
+        'num_content_layers': num_content_layers
     }
 
     # Параметры для визуализации
@@ -175,8 +179,6 @@ def run_style_transfer(content_path, style_path, num_iterations=1000, content_we
 
     return best_img, best_loss
 
-
-
 if __name__ == '__main__':
-    best, best_loss = run_style_transfer(content_path, style_path, num_iterations=100)
+    best, best_loss = run_style_transfer(content_path, style_path, num_iterations=10)
     show_results(best, content_path, style_path)

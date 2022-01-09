@@ -1,10 +1,10 @@
 import tensorflow as tf
 from tensorflow.keras import models
 
-from style_transfer import content_layers, style_layers
+# from style_transfer import content_layers, style_layers
 
 
-def get_model():
+def get_model(content_layers, style_layers):
     '''
     Создает модель с доступом к промежуточным слоям.
 
