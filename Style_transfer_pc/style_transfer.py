@@ -65,7 +65,6 @@ num_style_layers = len(style_layers) # количество слоев стил�
 
 
 def run_style_transfer(content_path, style_path, num_iterations=1000, content_weight=1e3, style_weight=1e-2):
-
    """
    Процесс переноса стиля
 
@@ -100,8 +99,7 @@ def run_style_transfer(content_path, style_path, num_iterations=1000, content_we
     init_image = load_and_process_img(content_path)  # загружаем и обрабатываем функцией изображение контента (передаем путь)
     init_image = tf.Variable(init_image, dtype=tf.float32)  # объявляем переменной (для того, чтобы менять значения)
     # Задаем оптимизатор
-    opt = tf.keras.optimizers.Adam(learning_rate=5, beta_1=0.99,
-                                   epsilon=1e-1)  # передаем в оптимизатор learning_rate(скорость обучения)
+    opt = tf.keras.optimizers.Adam(learning_rate=5, beta_1=0.99, epsilon=1e-1)  # передаем в оптимизатор learning_rate(скорость обучения)
     # beta1 (экспоненциальная скорость убывания оценки момента первого порядка)
     # epsilon (очень маленькое число, чтобы предотвратить деление на ноль)
 
@@ -176,6 +174,8 @@ def run_style_transfer(content_path, style_path, num_iterations=1000, content_we
         plt.yticks([])
 
     return best_img, best_loss
+
+
 
 if __name__ == '__main__':
     best, best_loss = run_style_transfer(content_path, style_path, num_iterations=100)
